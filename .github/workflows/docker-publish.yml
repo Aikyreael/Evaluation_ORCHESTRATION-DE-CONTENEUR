@@ -92,13 +92,26 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: List files in the root directory
+        run: |
+          echo "Listing files in the root directory:"
+          ls -la
+
+      - name: List files in the backend directory
+        run: |
+          echo "Listing files in the backend directory:"
+          ls -la backend
+
       - name: Navigate to backend directory
         run: cd backend
 
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Aikyreael_Evaluation_ORCHESTRATION-DE-CONTENEUR
+        run: |
+          echo "Listing files"
+          ls 
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Aikyreael_Evaluation_ORCHESTRATION-DE-CONTENEUR
 
   # Job pour l'analyse du Frontend (Angular)
   sonarcloud-frontend:
