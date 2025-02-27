@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property name="LOG_PATH" value="${LOG_PATH:-logs/app.log}" />
+    <property name="LOG_PATH" value="logs/app.log" />
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>${LOG_PATH}</file>
@@ -10,9 +10,15 @@
         </encoder>
     </appender>
 
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <root level="info">
+        <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </root>
 
 </configuration>
-

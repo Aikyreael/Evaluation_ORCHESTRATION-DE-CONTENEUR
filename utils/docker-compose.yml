@@ -1,5 +1,7 @@
 services:
   backend:
+    container_name: my-backend-container
+    image: my-backend-image
     build:
       context: ..
       dockerfile: utils/backend.Dockerfile
@@ -8,10 +10,7 @@ services:
     volumes:
       - logs:/app/logs
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:${DB_PORT}/${MYSQL_DATABASE}
-      - SPRING_DATASOURCE_USERNAME=${DB_USER}
-      - SPRING_DATASOURCE_PASSWORD=${DB_PASS}
-      - LOG_PATH=${LOG_PATH}
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/${MYSQL_DATABASE}
       - SPRING_PROFILES_ACTIVE=dev
     networks:
       - backend
@@ -23,11 +22,9 @@ services:
     container_name: ${MYSQL_NAME}
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER:${DB_USER}
-      - MYSQL_ROOT_PASSWORD=${DB_PASS}
-      - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - "3306:3306"
     volumes:
       - db:/var/lib/mysql
     networks:
