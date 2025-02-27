@@ -1,9 +1,7 @@
 services:
   frontend:
     container_name: frontend
-    build:
-      context: ..
-      dockerfile: utils/frontend.Dockerfile
+    image: zyreael/frontend:latest
     ports:
       - "4200:80"
     networks:
@@ -13,9 +11,7 @@ services:
 
   backend:
     container_name: backend
-    build:
-      context: ..
-      dockerfile: utils/backend.Dockerfile
+    image: zyreael/backend:latest
     ports:
       - "8080:8080"
     volumes:
