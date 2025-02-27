@@ -1,7 +1,18 @@
 services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ..
+      dockerfile: utils/frontend.Dockerfile
+    ports:
+      - "4200:80"
+    networks:
+      - app
+    depends_on:
+      - backend
+
   backend:
-    container_name: my-backend-container
-    image: my-backend-image
+    container_name: backend
     build:
       context: ..
       dockerfile: utils/backend.Dockerfile
@@ -13,7 +24,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/${MYSQL_DATABASE}
       - SPRING_PROFILES_ACTIVE=dev
     networks:
-      - backend
+      - app
     depends_on:
       - db
 
@@ -28,11 +39,11 @@ services:
     volumes:
       - db:/var/lib/mysql
     networks:
-      - backend
+      - app
 
 volumes:
   db:
   logs:
 
 networks:
-  backend:
+  app:

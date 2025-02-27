@@ -671,3 +671,8 @@ java.sql.SQLException: No database selected
 2025-02-27 13:50:13 - Le message - ID: 363, Date: 2025-02-27T13:50:13.870876, Contenu: azezae - à était sauvegardé
 2025-02-27 13:50:15 - insert into message (content,date,id) values (?,?,?)
 2025-02-27 13:50:15 - Le message - ID: 364, Date: 2025-02-27T13:50:15.376889, Contenu: aze - à était sauvegardé
+2025-02-27 14:16:38 - Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-27 14:16:38 - Graceful shutdown complete
+2025-02-27 14:16:38 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-02-27 14:16:38 - HikariPool-1 - Shutdown initiated...
+2025-02-27 14:16:39 - HikariPool-1 - Shutdown completed.
