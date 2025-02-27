@@ -102,6 +102,10 @@ jobs:
           ls 
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Aikyreael_Evaluation_ORCHESTRATION-DE-CONTENEUR
 
+      - name: Afficher les rapports Surefire
+        run: cat backend/target/surefire-reports/*.txt
+
+
   # Job pour l'analyse du Frontend (Angular)
   sonarcloud-frontend:
     name: SonarCloud Frontend Analysis (Angular)
@@ -113,7 +117,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '19'
 
       - name: Cache Node.js dependencies
         uses: actions/cache@v4
