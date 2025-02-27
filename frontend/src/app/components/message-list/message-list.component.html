@@ -1,0 +1,16 @@
+<div class="message-list">
+  <h2>Liste des Messages</h2>
+
+  <div class="messages">
+    <ul>
+      <li *ngFor="let message of messages">
+        {{ message.content }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="message-input">
+    <input type="text" [(ngModel)]="newMessage" placeholder="Écrire un message..." />
+    <button (click)="sendMessage()">Envoyer</button>
+  </div>
+</div>
