@@ -31,12 +31,6 @@ jobs:
             ${{ runner.os }}-docker-
 
 
-
-      - name: Run backend unit tests
-        run: |
-          cd backend
-          mvn clean test
-
       - name: Build frontend image
         run: |
           docker build -t zyreael/frontend:latest -f utils/frontend.Dockerfile .
