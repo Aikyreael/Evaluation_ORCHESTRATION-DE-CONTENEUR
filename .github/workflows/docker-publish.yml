@@ -30,6 +30,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
 
+#      - name: Run backend unit tests
+#        run: |
+#          cd backend
+#          mvn clean test
 
       - name: Build frontend image
         run: |
