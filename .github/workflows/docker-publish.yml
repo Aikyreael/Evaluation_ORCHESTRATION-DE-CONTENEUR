@@ -1,145 +1,52 @@
-#name: Docker Publish
-#
-#on:
-#  push:
-#    branches:
-#      - main
-#
-#jobs:
-#  build_and_push:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v2
-#
-#      - name: Log in to Docker Hub
-#        uses: docker/login-action@v2
-#        with:
-#          username: ${{ secrets.DOCKER_USERNAME }}
-#          password: ${{ secrets.DOCKER_PASSWORD }}
-#
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v2
-#
-#      - name: Cache Docker layers
-#        uses: actions/cache@v2
-#        with:
-#          path: ~/.cache/docker
-#          key: ${{ runner.os }}-docker-${{ github.sha }}
-#          restore-keys: |
-#            ${{ runner.os }}-docker-
-#
-#      - name: Build frontend image
-#        run: |
-#          docker build -t zyreael/frontend:latest -f utils/frontend.Dockerfile .
-#
-#      - name: Build backend image
-#        run: |
-#          docker build -t zyreael/backend:latest -f utils/backend.Dockerfile .
-#
-#      - name: Push frontend image
-#        run: |
-#          docker push zyreael/frontend:latest
-#
-#      - name: Push backend image
-#        run: |
-#          docker push zyreael/backend:latest
-#
-#      - name: Logout from Docker Hub
-#        run: |
-#          docker logout
-
-
-name: CI/CD Pipeline
+name: Docker Publish
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  # Job pour l'analyse du Backend (Java avec Maven)
-  sonarcloud-backend:
-    name: SonarCloud Backend Analysis (Maven)
+  build_and_push:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v2
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
         with:
-          java-version: 17
-          distribution: 'zulu'
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Cache SonarQube packages
-        uses: actions/cache@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
         with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+          path: ~/.cache/docker
+          key: ${{ runner.os }}-docker-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Build and analyze
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Build frontend image
         run: |
-          cd backend
-          echo "Listing files"
-          ls 
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Aikyreael_Evaluation_ORCHESTRATION-DE-CONTENEUR
+          docker build -t zyreael/frontend:latest -f utils/frontend.Dockerfile .
 
-      - name: Afficher les rapports Surefire
-        run: cat backend/target/surefire-reports/*.txt
-
-
-  # Job pour l'analyse du Frontend (Angular)
-  sonarcloud-frontend:
-    name: SonarCloud Frontend Analysis (Angular)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '19'
-
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-
-
-      - name: Install dependencies (Frontend)
+      - name: Build backend image
         run: |
-          cd frontend
-          echo "Listing files"
-          ls 
-          npm install --legacy-peer-deps
+          docker build -t zyreael/backend:latest -f utils/backend.Dockerfile .
 
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Build and analyze with SonarCloud
+      - name: Push frontend image
         run: |
-          cd frontend
-          echo "Listing files"
-          ls 
-          npm run build --if-present && sonar-scanner -Dsonar.projectKey=Aikyreael_Evaluation_ORCHESTRATION-DE-CONTENEUR
+          docker push zyreael/frontend:latest
+
+      - name: Push backend image
+        run: |
+          docker push zyreael/backend:latest
+
+      - name: Logout from Docker Hub
+        run: |
+          docker logout
 

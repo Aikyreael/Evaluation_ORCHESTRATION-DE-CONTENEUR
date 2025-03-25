@@ -1,3 +1,4 @@
+name: orchestration-eval
 services:
   frontend:
     container_name: frontend
