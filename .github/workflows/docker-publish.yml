@@ -30,6 +30,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
 
+
+
+      - name: Run backend unit tests
+        run: |
+          cd backend
+          mvn clean test
+
       - name: Build frontend image
         run: |
           docker build -t zyreael/frontend:latest -f utils/frontend.Dockerfile .
@@ -46,8 +53,14 @@ jobs:
         run: |
           docker push zyreael/backend:latest
 
-
       - name: Logout from Docker Hub
         run: |
           docker logout
+
+      - name: Send notification to Discord
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"content\": \"✅ Les images Docker frontend et backend ont bien été publiées sur Docker Hub !\"}" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
 
